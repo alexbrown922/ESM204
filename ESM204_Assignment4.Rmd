@@ -14,3 +14,13 @@ library(tidyverse)
 library(stargazer)
 ```
 
+```{r}
+mc_abatement <- read_csv("HW4Data.csv")
+```
+
+##1 
+
+```{r}
+
+```
+
