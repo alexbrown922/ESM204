@@ -48,5 +48,20 @@ summary(MC_D_model)
 
 D_int <- MC_D_model$coefficients[1]
 D_slope <- MC_D_model$coefficients[2]
+
+
+model_plot <- ggplot(data, aes(x=Abatement))+
+  geom_point(aes(y = MC_A, color = "MC_A"))+
+  geom_smooth(aes(y = MC_A), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_point(aes(y = MC_B, color = "MC_B"))+
+  geom_smooth(aes(y = MC_B), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_point(aes(y = MC_C, color = "MC_C"))+
+  geom_smooth(aes(y = MC_C), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_point(aes(y = MC_D, color = "MC_D"))+
+  geom_smooth(aes(y = MC_D), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  labs(x = "Abatement (tons of CO2)",
+       y = "Marginal Cost of Abatement ($/ton)")
+
+model_plot
 ```
 
