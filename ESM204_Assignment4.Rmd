@@ -21,6 +21,32 @@ mc_abatement <- read_csv("HW4Data.csv")
 ##1 
 
 ```{r}
+MC_A_model <- lm(MC_A ~ Abatement, data = mc_abatement)
 
+summary(MC_A_model)
+
+A_int <- MC_A_model$coefficients[1]
+A_slope <- MC_A_model$coefficients[2]
+
+MC_B_model <- lm(MC_B ~ Abatement, data = mc_abatement)
+
+summary(MC_B_model)
+
+B_int <- MC_B_model$coefficients[1]
+B_slope <- MC_B_model$coefficients[2]
+
+MC_C_model <- lm(MC_C ~ Abatement, data = mc_abatement)
+
+summary(MC_C_model)
+
+C_int <- MC_C_model$coefficients[1]
+C_slope <- MC_C_model$coefficients[2]
+
+MC_D_model <- lm(MC_D ~ Abatement, data = mc_abatement)
+
+summary(MC_D_model)
+
+D_int <- MC_D_model$coefficients[1]
+D_slope <- MC_D_model$coefficients[2]
 ```
 
