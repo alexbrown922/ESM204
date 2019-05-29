@@ -12,6 +12,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(stargazer)
+library(wesanderson)
+
 ```
 
 ```{r}
@@ -49,18 +51,29 @@ summary(MC_D_model)
 D_int <- MC_D_model$coefficients[1]
 D_slope <- MC_D_model$coefficients[2]
 
+#prod_vis <- ggplot(production_frame, aes(x = year,y = metric_ton, color = prod_by_sector)) +
+ # geom_line() +
 
-model_plot <- ggplot(mc_abatement, aes(x=Abatement))+
+model_plot <- ggplot(mc_abatement, aes(x = Abatement))+
   geom_point(aes(y = MC_A, color = "MC_A"))+
-  geom_smooth(aes(y = MC_A), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_smooth(aes(y = MC_A), method = lm, se = FALSE, size = 0.5, color = "red")+
   geom_point(aes(y = MC_B, color = "MC_B"))+
-  geom_smooth(aes(y = MC_B), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_smooth(aes(y = MC_B), method = lm, se = FALSE, size = 0.5, color = "darkseagreen3")+
   geom_point(aes(y = MC_C, color = "MC_C"))+
-  geom_smooth(aes(y = MC_C), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_smooth(aes(y = MC_C), method = lm, se = FALSE, size = 0.5, color = "orange")+
   geom_point(aes(y = MC_D, color = "MC_D"))+
-  geom_smooth(aes(y = MC_D), method = lm, se = FALSE, size = 0.5, color = "gray20")+
+  geom_smooth(aes(y = MC_D), method = lm, se = FALSE, size = 0.5, color = "darksalmon")+
+  scale_color_manual(values  = wes_palette("Darjeeling1"), name = "Sectors", labels = c("Sector A", "Sector B", "Sector C", "Sector D")) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_x_continuous(expand = c(0,0)) +
+  theme_classic() +
   labs(x = "Abatement (tons of CO2)",
-       y = "Marginal Cost of Abatement ($/ton)")
+       y = "Marginal Cost of Abatement ($/ton)", 
+       title = "Marginal Cost") +
+  theme(plot.title = element_text(hjust = 0.5))
+  
+
+#geom_line(data = catch_df, aes(x = catch_time_seq, y = catch_modeling), color = "red", size = 1)
 
 model_plot
 ```
