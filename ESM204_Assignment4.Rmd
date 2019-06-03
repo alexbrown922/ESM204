@@ -118,6 +118,27 @@ curve(d_D, from=0, to=400, xlab= "quantity", ylab = "price", add= TRUE, ylim = c
 
 ```
 
+## another demand graph for #2
+```{r}
+
+demand_plot <-ggplot(data.frame(x=c(0,200)))+
+  stat_function(fun=d_A, aes(color = "A"))+
+  stat_function(fun=d_B, aes(color = "B"))+
+  stat_function(fun=d_C, aes(color = "C"))+
+  stat_function(fun=d_D, aes(color = "D"))+
+  scale_x_continuous(limits = c(0,400), expand = c(0,0))+
+  scale_y_continuous(limits = c(0,200), expand = c(0,0))+
+  labs(fil = "", 
+       color = "Sector", 
+       x = "Carbon Demanded (tons of CO2)",
+       y = "Price ($/ton)",
+       title = "Carbon Emission Demand by Sector")+
+  theme_classic()
+demand_plot
+```
+
+
+
 ##3  just messing around
 
 ```{r}
