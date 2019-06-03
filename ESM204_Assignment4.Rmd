@@ -117,3 +117,26 @@ demand_D <- d_D(q_D)
 curve(d_D, from=0, to=400, xlab= "quantity", ylab = "price", add= TRUE, ylim = c(0,200), xlim = c(0,350), col = "orange")
 
 ```
+
+##3  just messing around
+
+```{r}
+A = 180
+B = 200
+C = 220
+D = 300
+A+B+C
+#needs to cut by 300
+```
+
+```{r}
+#Cost to each sector
+A_opt = (MC_A_model$coefficients[1]-A)/(-MC_A_model$coefficients[2] - (sectorAmp/A))
+A_price = MC_A_model$coefficients[2]*A_opt + MC_A_model$coefficients[1]
+#Total Cost of meeting the target in country X
+#Tax revenue generated 
+
+#Sector B
+B_opt = (MC_B_model$coefficients[1]-B)/(-MC_B_model$coefficients[2] - (sectorBmp/B))
+B_price = MC_B_model$coefficients[2]*B_opt + MC_B_model$coefficients[1]
+```
