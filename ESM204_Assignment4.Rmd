@@ -27,29 +27,37 @@ MC_A_model <- lm(MC_A ~ Abatement, data = mc_abatement)
 
 summary(MC_A_model)
 
-A_int <- MC_A_model$coefficients[1]
+A_int <- MC_A_model$coefficients[1] 
+#A_int <- -8.64
 A_slope <- MC_A_model$coefficients[2]
+#A_slope <- 0.577
 
 MC_B_model <- lm(MC_B ~ Abatement, data = mc_abatement)
 
 summary(MC_B_model)
 
 B_int <- MC_B_model$coefficients[1]
+#B_int <- 9.32
 B_slope <- MC_B_model$coefficients[2]
+#B_slope <- 0.199
 
 MC_C_model <- lm(MC_C ~ Abatement, data = mc_abatement)
 
 summary(MC_C_model)
 
 C_int <- MC_C_model$coefficients[1]
+#C_int <- -11.7
 C_slope <- MC_C_model$coefficients[2]
+#C_slope <- 0.784
 
 MC_D_model <- lm(MC_D ~ Abatement, data = mc_abatement)
 
 summary(MC_D_model)
 
 D_int <- MC_D_model$coefficients[1]
+#D_int <- 9.69
 D_slope <- MC_D_model$coefficients[2]
+#D_slope <- 0.26
 
 #prod_vis <- ggplot(production_frame, aes(x = year,y = metric_ton, color = prod_by_sector)) +
  # geom_line() +
@@ -217,3 +225,30 @@ B_opt = (MC_B_model$coefficients[1]-B)/(-MC_B_model$coefficients[2] - (sectorBmp
 B_price = MC_B_model$coefficients[2]*B_opt + MC_B_model$coefficients[1]
 ```
 >>>>>>> c4165dbe0a446cb73ad0a8e06b98f72aa45aad6d
+
+### 3.a.
+
+```{r, include=FALSE}
+abate<-c(100, 100, 100, 300)
+MCa<-(-0.577*100) + 95.19 
+MCb<-(-0.199*100) + 49.07
+MCc<-(-0.784*100) + 160.79
+MC<-rbind(MCa, MCb, MCc, NA)
+costa<-(MCa*100)+(100*(95.19-MCa)*0.5)
+costb<-(MCb*100)+(100*(49.07-MCb)*0.5)
+costc<-(MCc*100)+(100*(160.79-MCc)*0.5)
+totalcost<-sum(costa, costb, costc)
+cost<-rbind(costa, costb, costc, totalcost)
+parta<- cbind(abate, MC, cost)
+colnames(parta)=c("Units abated","Marginal cost", "Cost")
+row.names(parta)=c("Sector A", "Sector B", "Sector C", "Total Country X")
+
+parta
+```
+
+
+```{r, echo=FALSE}
+round(parta, 0)
+```
+```
+
