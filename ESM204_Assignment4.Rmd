@@ -63,7 +63,7 @@ model_plot <- ggplot(mc_abatement, aes(x = Abatement))+
   geom_smooth(aes(y = MC_C), method = lm, se = FALSE, size = 0.5, color = "orange")+
   geom_point(aes(y = MC_D, color = "MC_D"))+
   geom_smooth(aes(y = MC_D), method = lm, se = FALSE, size = 0.5, color = "darksalmon")+
-  scale_color_manual(values  = wes_palette("Darjeeling1"), name = "Sectors", labels = c("Sector A", "Sector B", "Sector C", "Sector D")) +
+  scale_color_manual(values  = wes_palette("Darjeeling1"), name = "Sector", labels = c("A", "B", "C", "D")) +
   scale_y_continuous(expand = c(0,5)) + # can change back to 0,0 
   scale_x_continuous(expand = c(0,5)) + # can change back to 0,0
   theme_classic() +
@@ -188,11 +188,11 @@ demand_plot <-ggplot(data.frame(x=c(0,200)))+
        x = "Carbon Demanded (tons of CO2)",
        y = "Price ($/ton)",
        title = "Carbon Emission Demand by Sector")+
-  theme_classic()
+  theme_classic() +
+  scale_color_manual(values  = wes_palette("Darjeeling1"), name = "Sector", labels = c("A", "B", "C", "D")) +
+  theme(plot.title = element_text(hjust = 0.5))
 demand_plot
 ```
-
-
 
 ##3  just messing around
 
