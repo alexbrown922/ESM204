@@ -224,31 +224,29 @@ A_price = MC_A_model$coefficients[2]*A_opt + MC_A_model$coefficients[1]
 B_opt = (MC_B_model$coefficients[1]-B)/(-MC_B_model$coefficients[2] - (sectorBmp/B))
 B_price = MC_B_model$coefficients[2]*B_opt + MC_B_model$coefficients[1]
 ```
->>>>>>> c4165dbe0a446cb73ad0a8e06b98f72aa45aad6d
 
 ### 3.a.
 
-```{r, include=FALSE}
-abate<-c(100, 100, 100, 300)
-MCa<-(-0.577*100) + 95.19 
-MCb<-(-0.199*100) + 49.07
-MCc<-(-0.784*100) + 160.79
-MC<-rbind(MCa, MCb, MCc, NA)
-costa<-(MCa*100)+(100*(95.19-MCa)*0.5)
-costb<-(MCb*100)+(100*(49.07-MCb)*0.5)
-costc<-(MCc*100)+(100*(160.79-MCc)*0.5)
-totalcost<-sum(costa, costb, costc)
-cost<-rbind(costa, costb, costc, totalcost)
-parta<- cbind(abate, MC, cost)
-colnames(parta)=c("Units abated","Marginal cost", "Cost")
-row.names(parta)=c("Sector A", "Sector B", "Sector C", "Total Country X")
-
-parta
+```{r}
+supplyA_p = function(x){
+  (MC_A_model$coefficients[2]*x +MC_A_model$coefficients[1])
+  }
+supplyB_p = function(x){
+  (MC_B_model$coefficients[2]*x +MC_B_model$coefficients[1])
+}
+supplyC_p = function(x){
+  (MC_C_model$coefficients[2]*x +MC_C_model$coefficients[1])
+  }
+  
 ```
 
 
-```{r, echo=FALSE}
-round(parta, 0)
-```
+```{r}
+lossA = integrate(supplyA_p, 0, 100) #2019.762
+lossB = integrate(supplyB_p, 0, 100) #1925.491
+lossC = integrate(supplyC_p, 0, 100) #2753.63
+country_loss = lossA$value + lossB$value + lossC$value  
+
+#total loss = 6698
 ```
 
