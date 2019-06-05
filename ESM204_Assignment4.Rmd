@@ -225,28 +225,89 @@ B_opt = (MC_B_model$coefficients[1]-B)/(-MC_B_model$coefficients[2] - (sectorBmp
 B_price = MC_B_model$coefficients[2]*B_opt + MC_B_model$coefficients[1]
 ```
 
-### 3.a.
+## 3
 
-```{r}
-supplyA_p = function(x){
-  (MC_A_model$coefficients[2]*x +MC_A_model$coefficients[1])
-  }
-supplyB_p = function(x){
-  (MC_B_model$coefficients[2]*x +MC_B_model$coefficients[1])
-}
-supplyC_p = function(x){
-  (MC_C_model$coefficients[2]*x +MC_C_model$coefficients[1])
-  }
+##a 
+```{r, include=FALSE}
+abate<-c(100, 100, 100, 300) # 100 for each sector, adds up to total for country
+MCa<-(-0.58*100) + 95.75  # slope * abatement + WTP (1st unit)
+MCb<-(-0.2*100) + 49.32 # slope * abatement + WTP (1st unit)
+MCc<-(-0.78*100) + 159.94 # slope * abatement + WTP (1st unit)
+MC<-rbind(MCa, MCb, MCc, NA)
+costa<-(MCa*100)+(100*(95.97-MCa)*0.5) # calculates area under the demand curve up to 100 tons of emissions for A
+costb<-(MCb*100)+(100*(49.32-MCb)*0.5) # calculates area under the demand curve up to 100 tons of emissions for A
+costc<-(MCc*100)+(100*(159.94-MCc)*0.5)# calculates area under the demand curve up to 100 tons of emissions for A
+totalcost<-sum(costa, costb, costc) #adds up areas
+cost<-rbind(costa, costb, costc, totalcost)
+parta<- cbind(abate, MC, cost)
+colnames(parta)=c("Units abated","Marginal cost", "Cost")
+row.names(parta)=c("Sector A", "Sector B", "Sector C", "Total Country X")
+parta
+
+# calculates area under the demand curve up to 100 tons of emissions for A,B,C. Gives you the forgone benefits using WTP functions for each sector
+```
+
+```{r, echo=FALSE}
+round(parta, 0)
+```
+##b
+
+
+```{r, include=FALSE}
+MC<-(616.74-300) /8 
+a<-( 95.75 - 0)/0.58 # Sector A WTP (1st unit) divided by slope
+b<-(49.32-0)/ 0.2 # Sector B WTP (1st unit) divided by slope
+c<-(159.94-0)/0.78 # Sector C WTP (1st unit) divided by slope
+abatea<-(95.75 - MC)/0.58 # sector A abatement
+abateb<-(49.32-MC)/ 0.2 # sector B abatement
+abatec<-(159.94-MC)/0.78 # sector C abatement
+totalabate<-sum(abatea, abateb, abatec) # aggregate abatement
+abate<-rbind(abatea, abateb, abatec, totalabate)
+taxa<-abatea*MC # sector A abatement * marginal cost
+taxb<-abateb*MC # sector B abatement * marginal cost
+taxc<-abatec*MC # sector C abatement * marginal cost
+totaltax<-sum(taxa, taxb, taxc)
+tax<-rbind(taxa, taxb, taxc, totaltax)
+costa<-MC*(a-abatea)*0.5 # Area of Sector A MC * (Sector A WTP (1st unit) divided by slope - sector A Abatement)
+costb<-MC*(b-abateb)*0.5 # Area of Sector B MC * (Sector B WTP (1st unit) divided by slope - sector B Abatement)
+costc<-MC*(c-abatec)*0.5 # Area of Sector C MC * (Sector C WTP (1st unit) divided by slope - sector C Abatement)
+totalcost<-sum(costa, costb, costc)
+cost<-rbind(costa, costb, costc, totalcost)
   
+partb<- cbind(abate, cost,tax)
+colnames(partb)=c("Units abated", "Cost","Tax")
+row.names(partb)=c("Sector A", "Sector B", "Sector C", "Total Country X")
+partb
+
+# marginal abatement costs are equal
 ```
 
-
-```{r}
-lossA = integrate(supplyA_p, 0, 100) #2019.762
-lossB = integrate(supplyB_p, 0, 100) #1925.491
-lossC = integrate(supplyC_p, 0, 100) #2753.63
-country_loss = lossA$value + lossB$value + lossC$value  
-
-#total loss = 6698
+```{r, echo=FALSE}
+round(partb,0)
 ```
 
+## c
+
+```{r, include=FALSE}
+MC<-(616.74-300) /8
+abatea<-( 95.75 - MC)/0.58 # sector A abatement
+abateb<-(49.32-MC)/ 0.2 # sector B abatement
+abatec<-(159.94-MC)/0.78 # sector C abatement 
+totalabate<-sum(abatea, abateb, abatec)
+abate<-rbind(abatea, abateb, abatec, totalabate)
+costa<-(abatea*MC)+(abatea*(95.97-MC)*0.5) # Area of Sector A MC * (Sector A WTP (1st unit) divided by slope - sector A Abatement)
+costb<-(abateb*MC)+(abateb*(49.32-MC)*0.5) # Area of Sector B MC * (Sector B WTP (1st unit) divided by slope - sector B Abatement)
+costc<-(abatec*MC)+(abatec*(159.94-MC)*0.5) # Area of Sector C MC * (Sector C WTP (1st unit) divided by slope - sector C Abatement)
+totalcost<-sum(costa, costb, costc)
+cost<-rbind(costa, costb, costc, totalcost)
+partc<- cbind(abate, cost)
+colnames(partc)=c("Units abated", "Cost")
+row.names(partc)=c("Sector A", "Sector B", "Sector C", "Total Country X")
+partc
+
+#equimarginal principle
+
+# aggregate goods horizontally 
+
+# abate 300 units of emissions the cost of abatement that meets the equimarginal principle is $39.59.
+```
