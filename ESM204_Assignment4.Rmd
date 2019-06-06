@@ -333,3 +333,47 @@ Sector A                  97  6563
 Sector B                  49  2162
 Sector C                 154 15393
 Total Country X          300 24118
+
+
+#5
+
+###a
+
+
+
+###b 
+
+
+```{r, include=FALSE}
+MC<-(954.01-600) /11.85
+MC
+300-222
+(87.69 - 39.59)/0.26
+abatea<-(95.75 - MC)/0.58 
+abateb<-(49.32-MC)/ 0.2
+abatec<-(159.94-MC)/0.78
+abated<-(87.69 - MC)/0.26
+totalabate<-sum(abatea, abateb, abatec, abated)
+abate<-rbind(abatea, abateb, abatec, abated, totalabate)
+abate
+costa<-(abatea*MC)+(abatea*(95.97-MC)*0.5)
+costb<-(abateb*MC)+(abateb*(49.32-MC)*0.5)
+costc<-(abatec*MC)+(abatec*(159.94-MC)*0.5)
+costd<-(abated*MC)+(abated*(87.69-MC)*0.5)
+totalcost<-sum(costa, costb, costc, costd)
+cost<-rbind(costa, costb, costc, costd, totalcost)
+part5<- cbind(abate, cost)
+colnames(part5)=c("Units abated", "Cost")
+row.names(part5)=c("Sector A", "Sector B", "Sector C", "Sector D","Total")
+
+part5
+```
+
+```{r, echo=FALSE}
+round(part5,0)
+```
+
+
+
+###c
+
