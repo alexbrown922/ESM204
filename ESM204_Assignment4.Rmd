@@ -377,3 +377,149 @@ round(part5,0)
 
 ###c
 
+
+## 3 (another way)
+
+3. Country X Abatement
+
+a. Cap on carbon
+
+```{r, total cost of meeting target if each county reduces by 100 tons}
+# Sector A
+# Marginal cost of carbon abatement = 0.5768*(Abatement) - 8.6445
+0.5768*(100) - 8.6445
+# Marginal cost = $49.0355
+# Cost (area under the curve) = $2019.55 - this may be incorrect (Jess)
+# To find the area under the curve, the equation is 0.5*100(base)*marginal cost(height)
+sectorA_totalcost <- 0.5*100*49.0355
+# Total cost of abatement of 100 for Sector A is $2451.775
+# Sector B
+# Marginal cost of carbon abatement = 0.1987*(Abatement) + 9.3177
+0.1987*(100) + 9.3177
+# Marginal cost = $29.1877
+# Cost = $1925.27 - this may be wrong (Jess)
+sectorB_totalcost <- 0.5*100*29.1877
+# Total cost of abatement of 100 for Sector B is $1459.385
+# Sector C
+# Marginal cost of carbon abatement = 0.7838*(Abatement) - 11.6550
+0.7838*(100) - 11.6550
+# Marginal cost = 66.725
+# Cost = $2753.5 - this may be wrong (Jess)
+sectorC_totalcost <- 0.5*100*66.725
+# Total cost of abatement of 100 for Sector C is $3336.25
+# Total cost for Country X
+# $6698.32 - this may be wrong (Jess)
+# Total cost for Country X is $ 7247.41
+countryX_totalcost3A <- sectorA_totalcost+sectorB_totalcost+sectorC_totalcost
+# No tax revenue generated in this scenario
+```
+
+
+b. Tax on Carbon
+
+```{r, add equations horizontally}
+# Rearrange equations
+# Sector A: Cost of carbon abatement = 0.5768*(Abatement) - 8.6445
+# Abatement = 1.733703*(cost) + 14.987
+      # non-rounded numbers just in case:
+      a1 <- 1/0.5768
+      a2 <- 8.6445/0.5768
+# Sector B: Cost of carbon abatement = 0.1987*(Abatement) + 9.3177
+# Abatement = 5.032713*(cost) -  46.89331
+      # non-rounded numbers
+      b1 <- 1/0.1987
+      b2 <- -9.3177/0.1987
+# Sector C: Cost of carbon abatement = 0.7838*(Abatement) - 11.6550
+# Abatement = 1.275836*(cost) + 14.86986
+      #non-rounded numbers
+      c1 <- 1/0.7838
+      c2 <- 11.6550/0.7838
+      
+# Add them up for aggregate equation
+      
+# Abatement = (a1 + b1 + c1)*cost + (a2 + b2 + c2)
+      m1 <- (a1 + b1 + c1) # 8.042251
+      y <- (a2 + b2 + c2) # -17.03644
+# Abatement = 8.042251*(cost) - 17.03644
+      
+```
+
+```{r, find tax price}
+# Rearrange aggregate equation to y = mx + b form
+      m <- 1/m1 # 0.12343
+      b <- -y/m1 # 2.11837
+# Marginal cost of abatement = 0.12343*(Abatement) + 2.11837
+      
+      
+# Plug in abatement amount
+tax <- 0.12343*(300) + 2.11837
+# Marginal cost of abating 300 tons = $39.14737
+# Tax should be set at $39.15
+```
+
+```{r, find quantity each sector will abate at tax price}
+# Sector A
+# 39.14737 = 0.5768*(Abatement) - 8.6445
+sectorA_abatement3B <- (tax + 8.6445) / 0.5768
+# Abatement = 82.85692 tons
+# Sector B
+# 39.14737 = 0.1987*(Abatement) + 9.3177
+sectorB_abatement3B <- (tax - 9.3177) / 0.1987
+# Abatement = 150.1242 tons
+# Sector C
+# 39.14737 = 0.7838*(Abatement) - 11.6550
+sectorC_abatement3B <- (tax + 11.6550) / 0.7838
+# Abatement = 64.81548 tons
+```
+
+
+```{r, cost to each sector}
+sectorA_totalcost3B <- (0.5*tax*(sectorA_abatement3B))
+# Total cost to Sector A under cap and trade is $1621.82
+sectorB_totalcost3B <- (0.5*tax*(sectorB_abatement3B))
+# Total cost to Sector B under cap and trade is $2938.48
+sectorC_totalcost3B <- (0.5*tax*(sectorC_abatement3B))
+# Total cost to Sector C under cap and trade is $1268.68
+```
+
+
+```{r, total cost of meeting target under a tax}
+countryX_totalcost3B <- 0.5*300*tax
+# Total cost of meeting target under tax for Country X is $5872.11
+```
+
+```{r, tax revenue generated in Country X}
+countryX_taxrev3B <- 300*tax
+# Tax revenue generated under tax of $39.15 is $11,744.21
+```
+
+C. Cap and trade.
+
+
+```{r, cap and trade amounts for each sector}
+# Sector A
+# 39.14737 = 0.5768*(Abatement) - 8.6445
+sectorA_captrade3C <- 100 - ((tax + 8.6445) / 0.5768)
+# Sector A needs to buy 17.143 credits to actually abate 100 tons
+# Sector B
+# 39.14737 = 0.1987*(Abatement) + 9.3177
+sectorB_captrade3C <- 100 - ((tax - 9.3177) / 0.1987)
+# Sector B abated more than 100 tons, so it can sell 50.124 credits
+# Sector C
+# 39.14737 = 0.7838*(Abatement) - 11.6550
+sectorC_captrade3C <- 100 - ((tax + 11.6550) / 0.7838)
+# Sector C needs to buy 35.185 credits to actually abate 100 tons
+```
+
+```{r, cost to each sector and country as a whole}
+sectorA_totalcost3C <- (0.5*tax*(sectorA_captrade3C+sectorA_abatement3B))
+# Total cost to Sector A under cap and trade is $1957.37
+sectorB_totalcost3C <- (0.5*tax*(sectorB_abatement3B + sectorB_captrade3C))
+# Total cost to Sector B under cap and trade is $1957.37
+sectorC_totalcost3C <- (0.5*tax*(sectorC_captrade3C + sectorC_abatement3B))
+# Total cost to Sector C under cap and trade is $1957.37
+countryX_totalcost3C <- sectorA_totalcost3C + sectorB_totalcost3C + sectorC_totalcost3C
+# Total cost to Country X under cap and trade is $5872.11
+```
+
+No tax revenue in a cap and trade system
