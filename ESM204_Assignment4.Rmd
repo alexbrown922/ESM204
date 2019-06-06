@@ -250,6 +250,13 @@ parta
 ```{r, echo=FALSE}
 round(parta, 0)
 ```
+
+             Units abated Marginal cost  Cost
+Sector A                 100            38  6686
+Sector B                 100            29  3932
+Sector C                 100            82 12094
+Total Country X          300            NA 22712
+
 ##b
 
 
@@ -285,6 +292,11 @@ partb
 ```{r, echo=FALSE}
 round(partb,0)
 ```
+Units abated Cost   Tax
+Sector A                  97 1351  3833
+Sector B                  49 3919  1926
+Sector C                 154 1005  6109
+Total Country X          300 6275 11868
 
 ## c
 
@@ -311,3 +323,13 @@ partc
 
 # abate 300 units of emissions the cost of abatement that meets the equimarginal principle is $39.59.
 ```
+
+```{r, echo=FALSE}
+round(partc,0)
+```
+
+Units abated  Cost
+Sector A                  97  6563
+Sector B                  49  2162
+Sector C                 154 15393
+Total Country X          300 24118
