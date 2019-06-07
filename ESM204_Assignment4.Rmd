@@ -202,28 +202,79 @@ demand_plot <-ggplot(data.frame(x=c(0,200)))+
 demand_plot
 ```
 
-##3  just messing around
+##3  just messing around - Alex Ivina
 
+#### a
 ```{r}
-A = 180
-B = 200
-C = 220
-D = 300
-A+B+C
-#needs to cut by 300
+
+## Find supply curves first
+
+s_A = function(x){
+  (MC_A_model$coefficients[2]*x +MC_A_model$coefficients[1])
+  }
+s_B = function(x){
+  (MC_B_model$coefficients[2]*x +MC_B_model$coefficients[1])
+}
+s_C = function(x){
+  (MC_C_model$coefficients[2]*x +MC_C_model$coefficients[1])
+}
+
 ```
 
 ```{r}
-#Cost to each sector
-A_opt = (MC_A_model$coefficients[1]-A)/(-MC_A_model$coefficients[2] - (sectorAmp/A))
-A_price = MC_A_model$coefficients[2]*A_opt + MC_A_model$coefficients[1]
-#Total Cost of meeting the target in country X
-#Tax revenue generated 
 
-#Sector B
-B_opt = (MC_B_model$coefficients[1]-B)/(-MC_B_model$coefficients[2] - (sectorBmp/B))
-B_price = MC_B_model$coefficients[2]*B_opt + MC_B_model$coefficients[1]
+# Each sector cuts their emission by 100; total 300
+# sector A: 180 to 80
+# sector B: 200 to 100
+# sector C: 220 to 120
+
+Sector_A <- integrate(s_A, 0, 100)
+Sector_B <- integrate(s_B, 0, 100)
+Sector_C <- integrate(s_C, 0, 100)
+Sector_A$value # 2019.762
+Sector_B$value # 1925.491
+Sector_C$value # 2753.63
+TC_country_cap <- Sector_A$value + Sector_B$value + Sector_C$value
+TC_country_cap # 6698.883
+# no tax revenue generated
+
 ```
+
+###b Tax on carbon 
+
+```{r}
+
+# first rearrange supply curves
+A_rearrange <- function(y){(1/a$coefficients[2])*(-a$coefficients[1] + y)}
+B_rearrange <- function(y){(1/b$coefficients[2])*(-b$coefficients[1] + y)}
+C_rearrange <- function(y){(1/c$coefficients[2])*(-c$coefficients[1] + y)}
+#ag_supply_country_X2 <- function(y){A_rearrange(y) + B_rearrange(y) + C_rearrange(y)}
+ag_intercept <- (-a$coefficients[1]/a$coefficients[2]) + (-b$coefficients[1]/b$coefficients[2]) + (-c$coefficients[1]/c$coefficients[2])
+ag_slope <- (1/a$coefficients[2]) + (1/b$coefficients[2]) + (1/c$coefficients[2])
+ag_supply_country_X <- function(x){(-ag_intercept/ag_slope) + (x/ag_slope)}
+taxprice <- ag_supply_country_X(300)
+A_rearrange(taxprice) + B_rearrange(taxprice) + C_rearrange(taxprice)
+A_abate <- A_rearrange(taxprice) # 83.33489 
+B_abate <- B_rearrange(taxprice) # 151.4956
+C_abate <- C_rearrange(taxprice) # 65.16953 
+A_tax_abatementcost <- integrate(supply_A, lower = 0, upper = A_abate) 
+TC_A_tax <- A_tax_abatementcost$value + (cp_A - A_abate)*taxprice   
+#  5093.786 
+B_tax_abatementcost <- integrate(supply_B, lower = 0, upper = B_abate) 
+TC_B_tax <- B_tax_abatementcost$value + (cp_B - B_abate)*taxprice   
+#  5604.635 
+C_tax_abatementcost <- integrate(supply_C, lower = 0, upper = C_abate) 
+TC_C_tax <- C_tax_abatementcost$value + (cp_C - C_abate)*taxprice   
+#  7009.365  
+TC_country_tax <- TC_C_tax + TC_B_tax + TC_A_tax
+#  17707.79
+#tax revenue generated
+tax_rev <- (cp_A - A_abate)*taxprice + (cp_B - B_abate)*taxprice  + (cp_C - C_abate)*taxprice 
+#  11827.97 
+
+
+```
+
 
 ## 3
 
