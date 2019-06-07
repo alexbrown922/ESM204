@@ -208,9 +208,9 @@ demand_plot <-ggplot(data.frame(x=c(0,200)))+
 demand_plot
 ```
 
-##3  just messing around - Alex Ivina
+##3  
 
-#### a
+#### a.
 ```{r}
 
 ## Find supply curves first
@@ -246,7 +246,7 @@ TC_country_cap # 6698.883
 
 ```
 
-####b Tax on carbon 
+####b. Tax on carbon 
 
 ```{r}
 
@@ -296,6 +296,29 @@ TC_country_captrade <- TC_A_captrade + TC_B_captrade + TC_C_captrade
 
 ```
 
+#4 
+
+```{r}
+
+# Modify supply curves
+
+A_rearrange <- function(y){(1/MC_A_model$coefficients[2])*(-MC_A_model$coefficients[1] + y)}
+B_rearrange <- function(y){(1/MC_B_model$coefficients[2])*(-MC_B_model$coefficients[1] + y)}
+C_rearrange <- function(y){(1/MC_C_model$coefficients[2])*(-MC_C_model$coefficients[1] + y)}
+D_rearrange <- function(y){(1/MC_D_model$coefficients[2])*(-MC_D_model$coefficients[1] + y)}
+#ag_supply_country_X2 <- function(y){A_rearrange(y) + B_rearrange(y) + C_rearrange(y)}
+ag_intercept_inter <- (-MC_A_model$coefficients[1]/MC_A_model$coefficients[2]) + (-MC_B_model$coefficients[1]/MC_B_model$coefficients[2]) + (-MC_C_model$coefficients[1]/MC_C_model$coefficients[2]) + (-MC_D_model$coefficients[1]/MC_D_model$coefficients[2])
+ag_slope_inter <- (1/MC_A_model$coefficients[2]) + (1/MC_B_model$coefficients[2]) + (1/MC_C_model$coefficients[2]) + (1/MC_D_model$coefficients[2])
+ag_supply_country_X_Y <- function(x){(-ag_intercept_inter/ag_slope_inter) + (x/ag_slope_inter)}
+taxprice_inter <- ag_supply_country_X_Y(300)
+A_rearrange(taxprice_inter) + B_rearrange(taxprice_inter) + C_rearrange(taxprice_inter) + D_rearrange(taxprice_inter)
+A_abate_inter <- A_rearrange(taxprice_inter) # 66.65079 
+B_abate_inter <- B_rearrange(taxprice_inter) # 103.0711
+C_abate_inter <- C_rearrange(taxprice_inter) #  52.89119  
+D_abate_inter <- D_rearrange(taxprice_inter) # 77.3869 
+### Abatement 300
+
+```
 
 
 
@@ -306,7 +329,7 @@ TC_country_captrade <- TC_A_captrade + TC_B_captrade + TC_C_captrade
 
 
 
-###b 
+###b. 
 
 
 ```{r, include=FALSE}
@@ -340,5 +363,5 @@ round(part5,0)
 
 
 
-###c
+###c. 
 
